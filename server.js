@@ -7,51 +7,44 @@ const cookieParser = require('cookie-parser')
 const bcrypt = require('bcryptjs')
 const expressSession = require('express-session')
 const bodyParser = require('body-parser')
-const User = require('./user')
+let User = require('./user')
 
-mongoose.connect("mongodb+srv://John:<123>@cluster0.eb0po.mongodb.net/<dbname>?retryWrites=true&w=majority",
-{
+
+mongoose.connect("mongodb+srv://john:1234@cluster0.eb0po.mongodb.net/lhfood?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}, () =>
-{
+}, () => {
     console.log('mogoose is connected')
 })
 
 const app = express()
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:true}))
-app.use(cors(
-    {
-        origin: "http://localhost:3000",
-        credentials: true
-    }
-))
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+app.use(cors({
+    origin: "http://localhost:8100",
+    credentials: true
+}))
 
-app.use(expressSession(
-    {
-        secret: "sercretcode",
-        resave: true,
-        saveUninitialized: true
-    }
-))
+app.use(expressSession({
+    secret: "sercretcode",
+    resave: true,
+    saveUninitialized: true
+}))
 app.use(cookieParser("secretcode"))
 app.use(passport.initialize())
 app.use(passport.session())
 require('./passportConfig')(passport)
 
 
-app.post("/login", (req, res, next) => 
-{
-    passport.authenticate('local', (err, user, info) =>
-    {
+app.post("/login", (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
         if (err) throw err
         if (!user) res.send('no user exists')
-        else
-        {
-            req.logIn((user, err) =>
-            {
+        else {
+            req.logIn((user, err) => {
                 if (err) throw err
                 res.send('success!')
                 console.log(req.user)
@@ -60,33 +53,30 @@ app.post("/login", (req, res, next) =>
     })(req, res, next)
 })
 
-app.post("/register", (req, res) => 
-{
-    User.findOne({username: req.body.username}, async (err, doc) =>
-    {
-        if(err) throw err
-        if (doc) res.send('User already exists')
-        if(!doc)
-        {
-            const hashedPassword = await bcrypt.hash(req.body.password, 10)
-            const newUser = new User(
-                {
-                    username: req.body.username,
-                    password: hashedPassword
-                }
-            )
-            await newUser.save()
-            res.send('user created')
+app.post("/register", (req, res) => {
+    console.log(`hello from register`)
+    User.findOne({
+        username: req.body.username
+    }, async (err, doc) => {
+        if (err) console.log(err);
+        if (doc) res.send("User Already Exists");
+        if (!doc) {
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+            const newUser = new User({
+                username: req.body.username,
+                password: hashedPassword,
+            });
+            await newUser.save();
+            res.send("User Created");
         }
     })
-})
+});
 
-app.get("/user", (req, res) => 
-{
+app.get("/user", (req, res) => {
     res.send(req.user)
 })
 
-app.listen(4000, () =>
-{
+app.listen(4000, () => {
     console.log(`server has started`)
 })
