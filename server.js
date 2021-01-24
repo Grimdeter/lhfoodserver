@@ -81,7 +81,7 @@ app.get("/user", (req, res) => {
 })
 
 const bot = new TeleBot({
-    token: "1530562815:AAFqJVl_LvBZAdRFvE8VSYEtG-qvlfigBvk",
+    token: "1530562815:AAHsl78h62OKQCFxJI5JKyEx4F2l7n2IhYA",
 });
 
 bot.on(["/start", "/hello"], (msg) => {
@@ -93,6 +93,9 @@ bot.on(["/start", "/hello"], (msg) => {
 bot.on("/help", (msg) => {
     bot.sendMessage(msg.chat.id, `SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT`)
 });
+
+bot.start();
+
 
 app.listen(4000, () => {
     console.log(`server has started`)
