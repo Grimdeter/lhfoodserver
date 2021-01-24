@@ -8,13 +8,15 @@ const bcrypt = require('bcryptjs')
 const expressSession = require('express-session')
 const bodyParser = require('body-parser')
 let User = require('./user')
+const TeleBot = require("telebot");
+
 
 
 mongoose.connect("mongodb+srv://john:1234@cluster0.eb0po.mongodb.net/lhfood?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }, () => {
-    console.log('mogoose is connected')
+    console.log('mongoose is connected')
 })
 
 const app = express()
@@ -23,6 +25,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }))
+
 app.use(cors({
     origin: "http://localhost:8100",
     credentials: true
@@ -76,6 +79,20 @@ app.post("/register", (req, res) => {
 app.get("/user", (req, res) => {
     res.send(req.user)
 })
+
+const bot = new TeleBot({
+    token: "1530562815:AAFqJVl_LvBZAdRFvE8VSYEtG-qvlfigBvk",
+});
+
+bot.on(["/start", "/hello"], (msg) => {
+    //all the information about user will come with the msg
+    //   console.log(msg);
+    bot.sendMessage(msg.from.id, `SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT`);
+});
+
+bot.on("/help", (msg) => {
+    bot.sendMessage(msg.chat.id, `SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT`)
+});
 
 app.listen(4000, () => {
     console.log(`server has started`)
