@@ -86,7 +86,7 @@ const bot = new TeleBot({
 
 bot.on(["/start", "/hello"], (msg) => {
     //all the information about user will come with the msg
-    //   console.log(msg);
+    console.log(msg);
     bot.sendMessage(msg.from.id, `SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT SAMPLE TEXT`);
 });
 
