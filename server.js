@@ -41,6 +41,10 @@ app.use(passport.initialize())
 app.use(passport.session())
 require('./passportConfig')(passport)
 
+app.get('/', (req, res) => {
+    console.log(`req came`)
+    res.send('Welcome to Edurekas REST API with Node.js Tutorial!!');
+})
 
 app.post("/login", (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
