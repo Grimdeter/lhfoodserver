@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(cors({
-    origin: "http://localhost:8100",
+    origin: "https://35.246.57.142",
     credentials: true
 }))
 
