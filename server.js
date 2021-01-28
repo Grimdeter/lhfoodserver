@@ -42,7 +42,7 @@ app.use(passport.session())
 require('./passportConfig')(passport)
 
 app.get('/', (req, res) => {
-    console.log(`req came`)
+    console.log(`response came`)
     res.send('Welcome to Edurekas REST API with Node.js Tutorial!!');
 })
 
